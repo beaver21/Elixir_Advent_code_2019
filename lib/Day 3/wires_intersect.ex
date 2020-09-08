@@ -1,59 +1,48 @@
 defmodule WiresIntersect do
+  @directions %{"R" => :right, "L" => :left, "U" => :up, "D" => :down}
 
-  def getCloserIntersectDistance(directives1, directives2) do
-    intersects = getAllIntersect(directives1, directives2)
-    intersectDistances = Enum.map(intersects, fn x -> abs(Enum.at(x,0)) + abs(Enum.at(x,1)) end)
-      |> Enum.sort()
-
-    Enum.at(intersectDistances, 0)
+  def get_closer_intersect_distance(directives1, directives2) do
+    intersects = get_all_intersect(directives1, directives2)
+    
+    Enum.map(intersects, fn x -> abs(Enum.at(x,0)) + abs(Enum.at(x,1)) end)
+    |> Enum.sort()
+    |> Enum.at(0)
   end
 
-  def getAllIntersect(directives1, directives2) do
-    path1 = calculateAllPath(directives1)
-    path2 = calculateAllPath(directives2)
+  def get_all_intersect(directives1, directives2) do
+    path1 = calculate_all_path(directives1)
+    path2 = calculate_all_path(directives2)
 
     MapSet.intersection(MapSet.new(path1), MapSet.new(path2))
   end
 
-  def getDirective(directive) do
-    [direction | distance] = String.split(directive,"",trim: true)
+  def get_directive(directive) do
+    [dir | distance] = String.split(directive,"",trim: true)
 
-    %{direction: direction, distance: String.to_integer(Enum.join(distance))}
+    {@directions[dir], String.to_integer(Enum.join(distance))}
   end
 
-  def calculateAllPath(t, acc \\ [[0,0]])
+  def calculate_all_path(directives) do    
+    Enum.reduce(directives, [[0,0]], fn directive, acc ->
+      last_path = List.last(acc)
 
-  def calculateAllPath([directive | remainings], acc) do
-    last_path = Enum.at(acc, Enum.count(acc) - 1)
-
-    paths = getPathForDirective(directive, Enum.at(last_path, 0), Enum.at(last_path, 1))
-
-    calculateAllPath(remainings, acc ++ paths)
+      acc ++ get_path_for_directive(directive, Enum.at(last_path, 0), Enum.at(last_path, 1))
+    end) 
+    |> Enum.drop(1)   
   end
 
-  def calculateAllPath([], acc), do: Enum.drop(acc, 1)
+  def get_path_for_directive(directive, x, y) do
+    {direction, distance} = get_directive(directive)
 
-  @spec getPathForDirective(binary, any, any) :: [any]
-  def getPathForDirective(directive, x, y) do
-    directive = getDirective(directive)
 
-    calculatePossibility(directive.direction, directive.distance, x, y)
-  end
-
-  def calculatePossibility("U", distance, x, y) do
-    Enum.map(1..distance, fn d -> [x + d, y] end)
-  end
-
-  def calculatePossibility("D", distance, x, y) do
-    Enum.map(1..distance, fn d -> [x - d, y] end)
-  end
-
-  def calculatePossibility("R", distance, x, y) do
-    Enum.map(1..distance, fn d -> [x, y + d] end)
-  end
-
-  def calculatePossibility("L", distance, x, y) do
-    Enum.map(1..distance, fn d -> [x, y - d] end)
+    Enum.map(1..distance, fn d -> 
+        case direction do
+          :right -> [x, y + d]
+          :left -> [x, y - d]
+          :up -> [x + d, y]
+          :down -> [x - d, y]
+        end
+      end)
   end
 
 end
