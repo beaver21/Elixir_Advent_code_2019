@@ -55,9 +55,9 @@ defmodule WiresIntersectTest do
 
   @tag :response
   test "responses" do
-    directives1 = File.read!("test/Day 3/directives1.txt")
+    directives1 = File.read!("test/2019/Day 3/directives1.txt")
                  |> String.split(",")
-    directives2 = File.read!("test/Day 3/directives2.txt")
+    directives2 = File.read!("test/2019/Day 3/directives2.txt")
     |> String.split(",")
 
     assert 768 == get_closer_intersect_distance(directives1, directives2)

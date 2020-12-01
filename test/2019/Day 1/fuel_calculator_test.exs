@@ -19,7 +19,7 @@ test "calculate for multiples modules" do
 end
 
 test "code answer" do
-  assert getModulesFromFile("test/Day 1/modules.txt")
+  assert getModulesFromFile("test/2019/Day 1/modules.txt")
         |> calculateFuel() == 3246455
 end
 
@@ -32,7 +32,7 @@ test "recursive for mutliple modules" do
 end
 
 test "code 2 answer" do
-  assert FuelCalculatorRecursively.getModulesFromFile("test/Day 1/modules.txt")
+  assert FuelCalculatorRecursively.getModulesFromFile("test/2019/Day 1/modules.txt")
     |> FuelCalculatorRecursively.calculateFuelForModules() == 4866824
 end
 

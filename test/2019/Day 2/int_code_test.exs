@@ -24,7 +24,7 @@ defmodule IntCodeTest do
   end
 
   test "answer" do
-    path = "test/Day 2/intcodes.txt"
+    path = "test/2019/Day 2/intcodes.txt"
 
     int_codes =  File.read!(path)
     |> String.split(",")
@@ -37,7 +37,7 @@ defmodule IntCodeTest do
   end
 
   test "answer part 2" do
-    path = "test/Day 2/intcodes.txt"
+    path = "test/2019/Day 2/intcodes.txt"
     int_codes =  File.read!(path)
     |> String.split(",")
     |> Enum.map(fn x -> String.to_integer(x) end)
